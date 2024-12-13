@@ -1,0 +1,81 @@
+##Codigo Fonte:
+def identificar_bandeira(cartao):
+    """
+    Identifica a bandeira de um cartão de crédito com base no número.
+    
+    :param cartao: Número do cartão de crédito (string ou inteiro).
+    :return: Nome da bandeira ou mensagem de erro.
+    """
+    cartao = str(cartao)
+    
+    if cartao.startswith('4') and len(cartao) in [13, 16]:
+        return "Visa"
+    elif cartao[:2] in ['51', '52', '53', '54', '55'] and len(cartao) == 16:
+        return "MasterCard"
+    elif cartao[:2] in ['34', '37'] and len(cartao) == 15:
+        return "American Express"
+    elif cartao[:4] == '6011' and len(cartao) == 16:
+        return "Discover"
+    elif cartao[:4] in ['3528', '3589'] and len(cartao) == 16:
+        return "JCB"
+    else:
+        return "Bandeira não reconhecida ou número inválido."
+
+# Exemplo de uso
+numero_cartao = input("Digite o número do cartão: ")
+bandeira = identificar_bandeira(numero_cartao)
+print(f"Bandeira identificada: {bandeira}")
+
+##Melhorias 
+def validar_luhn(cartao):
+    """
+    Valida o número do cartão usando o algoritmo de Luhn.
+    
+    :param cartao: Número do cartão de crédito (string).
+    :return: True se for válido, False caso contrário.
+    """
+    soma = 0
+    inverter = cartao[::-1]  # Inverte o número para processar da direita para a esquerda
+    for i, digito in enumerate(inverter):
+        num = int(digito)
+        if i % 2 == 1:  # Dobra a cada segundo dígito
+            num *= 2
+            if num > 9:  # Se o resultado for maior que 9, subtraia 9
+                num -= 9
+        soma += num
+    return soma % 10 == 0
+
+
+def identificar_bandeira(cartao):
+    """
+    Identifica a bandeira de um cartão de crédito com base no número.
+    
+    :param cartao: Número do cartão de crédito (string ou inteiro).
+    :return: Nome da bandeira ou mensagem de erro.
+    """
+    cartao = str(cartao)
+    
+    if not validar_luhn(cartao):
+        return "Número de cartão inválido pelo algoritmo de Luhn."
+    
+    if cartao.startswith('4') and len(cartao) in [13, 16, 19]:
+        return "Visa"
+    elif cartao[:2] in ['51', '52', '53', '54', '55'] and len(cartao) == 16:
+        return "MasterCard"
+    elif cartao[:2] in ['34', '37'] and len(cartao) == 15:
+        return "American Express"
+    elif cartao[:4] == '6011' and len(cartao) == 16:
+        return "Discover"
+    elif cartao[:2] in ['35'] and len(cartao) in [16, 19]:
+        return "JCB"
+    elif cartao[:4] in ['2200', '2204'] and len(cartao) == 16:
+        return "Mir"
+    elif cartao[:2] in ['36', '38'] and len(cartao) == 14:
+        return "Diners Club"
+    else:
+        return "Bandeira não reconhecida ou número inválido."
+
+# Exemplo de uso
+numero_cartao = input("Digite o número do cartão: ")
+bandeira = identificar_bandeira(numero_cartao)
+print(f"Bandeira identifica
